@@ -1,0 +1,85 @@
+{{define "Home"}}
+
+{{template "_head"}}
+{{template "_nav"}}
+
+<body>
+  <div class="container">
+    <section class="card">
+      <div>
+        <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Tamanho</th>
+                            <th>Modificado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .}}
+                        <tr>
+                            <td>{{.Name}} </div></td>
+                            <td>{{.Size}} KBs</td>
+                            <td>{{.Modified}}</td>
+                            <td><button onclick="Download('{{.Name}}')" class="btn btn-primary">Baixar</button></td>
+                            <td><button onclick="onDelete('{{.Name}}')" class="btn btn-danger">Deletar</button></td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</body>
+<script>
+  function Download(name) {
+    let url = "http://10.0.0.212:80/download?file=" + name
+    let options = {
+      method: 'GET',
+      cache: 'default'
+    };
+
+    let strMimeType;
+    let strFileName;
+
+    //Perform a GET Request to server
+    fetch(url, options)
+      .then(function (response) {
+        let contentType = response.headers.get("Content-Type"); //Get File name from content type
+        strMimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        strFileName = contentType.split(";")[1];
+        return response.blob();
+
+      }).then(function (myBlob) {
+        let downloadLink = window.document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(new Blob([myBlob], {type: strMimeType}));
+        downloadLink.download = strFileName;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }).catch((e) => {
+        console.log("e", e);
+      });
+  }
+
+  function onDelete(name) {
+    let resposta = confirm("Deseja mesmo deletar ?")
+    if (resposta) {
+      fetch('http://10.0.0.212:80/delete?file=' + name, {
+        method: 'DELETE',
+        headers: {
+          "Accept": "*/*",
+        },
+        credentials: 'include',
+      })
+        .catch(error => {
+          console.error('Error sending data:', error);
+        });
+
+      location.reload()
+    }
+  }
+</script>
+
+</html>
+{{end}}

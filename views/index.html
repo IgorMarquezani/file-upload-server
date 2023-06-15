@@ -1,0 +1,60 @@
+{{define "Index"}}
+
+{{template "_head"}}
+
+<html>
+
+<nav class="navbar navbar-light bg-light mb-4">
+  <a class="navbar-brand" href="http://10.0.0.212:80/files">Listar arquivos</a>
+</nav>
+
+<body>
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Selecionar arquivo</label>
+    <input type="file" class="form-control-file" id="fileInput">
+  </div>
+  <button onclick="submitFile()">Enviar</button>
+
+  <script>
+    function submitFile() {
+      var fileInput = document.getElementById('fileInput');
+      var file = fileInput.files[0];
+
+      if (file) {
+        // You can perform additional validations on the file here if needed
+
+        // Create a new FormData object
+        var formData = new FormData();
+
+        // Append the file to the form data
+        formData.append('file', file);
+
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Set up the request
+        xhr.open('POST', '/upload', true);
+
+        // Set up the onload function
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            // File upload successful
+            alert('Arquivo gravado com sucesso');
+          } else {
+            // File upload failed
+            alert('Erro ao enviar o arquivo, status: ' + xhr.status);
+          }
+        };
+
+        // Send the request
+        xhr.send(formData);
+      } else {
+        // No file selected
+        alert('Por favor escolha um arquivo');
+      }
+    }
+  </script>
+</body>
+
+</html>
+{{end}}
