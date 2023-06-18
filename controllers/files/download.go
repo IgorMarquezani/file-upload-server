@@ -12,7 +12,7 @@ import (
 )
 
 func Download(c *fiber.Ctx) error {
-	file, err := os.OpenFile("./uploads/" + c.Query("file"), os.O_RDWR, 0666)
+	file, err := os.OpenFile("./uploads/"+c.Query("file"), os.O_RDWR, 0666)
 	if err != nil {
 		return err
 	}
@@ -25,15 +25,15 @@ func Download(c *fiber.Ctx) error {
 		return err
 	}
 
-	Type := http.DetectContentType(c.Response().Body())
-  Type = strings.Split(Type, ";")[0]
-  size := strconv.FormatInt(info.Size(), 10)
-  name := strings.Split(file.Name(), "/")[2]
+	Type := strings.Split(http.DetectContentType(c.Response().Body()), ";")[0]
+	size := strconv.FormatInt(info.Size(), 10)
+	name := strings.Split(file.Name(), "/")[2]
 
-  log.Printf("Downloaded a file of type %s with a size of %s with name %v", Type, size, name)
+	log.Printf("Downloaded a file of %s bytes named %v of the type %s", size, name, Type)
 
-	c.Response().Header.Set("Content-Language", "pt-br")
-	c.Response().Header.Set("Content-Type", Type + ";" + name)
+	c.Response().Header.Set("Content-Language", "pt-BR")
+	c.Response().Header.Set("Content-Type", Type+";"+"charset=utf-8")
+	c.Response().Header.Set("Content-Disposition", `attachment; filename="`+name+`"`)
 	c.Response().Header.Set("Content-Length", size)
 
 	return nil

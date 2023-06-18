@@ -3,5 +3,5 @@ package controllers
 import "github.com/gofiber/fiber/v2"
 
 func Index(c *fiber.Ctx) error {
-  return c.Render("Index", nil)
+	return c.Render("Index", nil)
 }
