@@ -18,9 +18,13 @@ import (
 	"github.com/wifi-transfer/routes"
 )
 
+const (
+  help = ``
+)
+
 var (
 	regex     *regexp.Regexp
-	addr      = "0.0.0.0"
+	addr      = "127.0.0.1"
 	port      = ":80"
 	container bool
 )
