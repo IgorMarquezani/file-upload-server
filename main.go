@@ -19,14 +19,22 @@ import (
 )
 
 const (
-  help = ``
+	help = `--help: show this message.
+
+-p {port-number}: especifies the port number.
+
+-a {ip-address}: especifies the ip addres to be used. (Does not support ipv6).
+
+--use-wifi: uses your machine ip addres in the local wi-fi network. (only works on linux and windows 11).
+
+--add-user {name@password}: creates a user with the especified name and password. `
 )
 
 var (
-	regex     *regexp.Regexp
-	addr      = "127.0.0.1"
-	port      = ":80"
-	container bool
+	helped bool
+	regex  *regexp.Regexp
+	addr   = "127.0.0.1"
+	port   = ":80"
 )
 
 func init() {
@@ -70,9 +78,10 @@ func getWifiNetworkIP() string {
 
 func executeArgs(args []string) error {
 	for i := 1; i < len(args); i += 2 {
-		if args[i] == "-c" {
-			container = true
-			i--
+		if args[i] == "--help" {
+			fmt.Println(help)
+			helped = true
+			return nil
 		}
 
 		if args[i] == "-p" {
@@ -141,5 +150,7 @@ func main() {
 	controllers.Ip = addr
 	controllers.Port = port
 
-	log.Fatal(app.Listen(addr + port))
+	if !helped {
+		log.Fatal(app.Listen(addr + port))
+	}
 }
