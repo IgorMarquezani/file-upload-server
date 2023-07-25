@@ -1,6 +1,7 @@
 package files
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -9,9 +10,14 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/wifi-transfer/controllers"
 )
 
 func Download(c *fiber.Ctx) error {
+	if err := controllers.AuthenticateSession(c); err != nil {
+		return fmt.Errorf("Você não fez login")
+	}
+
 	file, err := os.OpenFile("./uploads/"+c.Query("file"), os.O_RDWR, 0666)
 	if err != nil {
 		return err

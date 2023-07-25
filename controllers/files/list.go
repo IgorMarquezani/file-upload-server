@@ -1,23 +1,27 @@
 package files
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/wifi-transfer/controllers"
 )
 
-type File struct {
-	Name     string
-	Size     float64
-	Modified string
-}
-
 func List(c *fiber.Ctx) error {
-	var list []File
+	if err := controllers.AuthenticateSession(c); err != nil {
+		return fmt.Errorf("Você não fez login")
+	}
 
-	files, err := os.ReadDir("./uploads/")
+	server := ServerFiles{
+		Ip:    controllers.Ip,
+		Port:  controllers.Port,
+		Files: make([]File, 0),
+	}
+
+	files, err := os.ReadDir("./uploads")
 	if err != nil {
-    return err
+		return err
 	}
 
 	for _, file := range files {
@@ -26,12 +30,12 @@ func List(c *fiber.Ctx) error {
 			continue
 		}
 
-		list = append(list, File{
+		server.Files = append(server.Files, File{
 			Name:     file.Name(),
 			Size:     float64(info.Size() / 1024),
 			Modified: info.ModTime().Format("02-01-2006"),
 		})
 	}
 
-	return c.Render("Home", list)
+	return c.Render("Home", server)
 }

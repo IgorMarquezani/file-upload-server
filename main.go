@@ -13,13 +13,16 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 
+	"github.com/wifi-transfer/controllers"
+	"github.com/wifi-transfer/controllers/users"
 	"github.com/wifi-transfer/routes"
 )
 
 var (
-	regex *regexp.Regexp
-	addr  = "0.0.0.0"
-	port  = ":80"
+	regex     *regexp.Regexp
+	addr      = "0.0.0.0"
+	port      = ":80"
+	container bool
 )
 
 func init() {
@@ -63,6 +66,11 @@ func getWifiNetworkIP() string {
 
 func executeArgs(args []string) error {
 	for i := 1; i < len(args); i += 2 {
+		if args[i] == "-c" {
+			container = true
+			i--
+		}
+
 		if args[i] == "-p" {
 			if len(args) <= i+1 {
 				return fmt.Errorf("Invalid argument for port number")
@@ -92,16 +100,27 @@ func executeArgs(args []string) error {
 			addr = getWifiNetworkIP()
 			i--
 		}
+
+		if args[i] == "--add-user" {
+			if len(args) <= i+1 {
+				return fmt.Errorf("Invalid argument for user creation")
+			}
+
+			credentials := strings.Split(args[i+1], "@")
+			if len(credentials) < 2 {
+				return fmt.Errorf("Invalid argument for user creation")
+			}
+
+			users.AddUser(credentials[0], credentials[1])
+		}
 	}
 
 	return nil
 }
 
 func main() {
-	engine := html.New("./views", ".html")
-
 	app := fiber.New(fiber.Config{
-		Views:   engine,
+		Views:   html.New("views", ".html"),
 		AppName: "http file transfer",
 	})
 
@@ -114,6 +133,9 @@ func main() {
 		fmt.Println(err)
 		os.Exit(2)
 	}
+
+	controllers.Ip = addr
+	controllers.Port = port
 
 	log.Fatal(app.Listen(addr + port))
 }

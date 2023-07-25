@@ -1,0 +1,83 @@
+{{define "Login"}}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+{{template "_head"}}
+
+<body>
+  <div id="loginForm">
+    <div class="form-group row">
+      <label for="nameInput" class="col-sm-2 col-form-label">Nome:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="nameInput" placeholder="Digite seu nome">
+        <label id="nameErr" class="text-warning"></label>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="passwdInput" class="col-sm-2 col-form-label">Senha:</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="passwdInput" placeholder="Digite sua senha">
+        <label id="passwdErr" class="text-warning"></label>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-10">
+        <button onclick="submit()" class="btn btn-primary">Enviar</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  function submit(e) {
+    var name = document.getElementById('nameInput').value;
+    var passwd = document.getElementById('passwdInput').value;
+
+    if (name == '') {
+      document.getElementById('nameErr').innerHTML = "Digite seu nome"
+    } else {
+      document.getElementById('nameErr').innerHTML = ""
+    }
+
+    if (passwd == '') {
+      document.getElementById('passwdErr').innerHTML = "Digite sua senha"
+    } else {
+      document.getElementById('passwdErr').innerHTML = ""
+    }
+
+    if (name == '' || passwd == '') {
+      return
+    }
+
+    var data = new FormData();
+
+    data.append('name', name);
+    data.append('passwd', passwd);
+
+    var req = new XMLHttpRequest();
+
+    req.open('POST', '/user/validate');
+
+    req.onload = function () {
+      if (req.status == 200) {
+        location.href = "/files/list"
+      } else if (req.status == 401) {
+        document.getElementById('passwdErr').innerHTML = "Nome ou senha inválidos"
+      } else {
+        alert("Ocorreu um erro inesperado")
+      }
+    };
+
+    req.send(data);
+  }
+
+  $(window).on("keypress", function (e) {
+    if (e.key == "Enter") {
+      submit();
+    }
+  });
+</script>
+
+</html>
+{{end}}

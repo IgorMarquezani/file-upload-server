@@ -1,7 +1,13 @@
 {{define "Home"}}
 
+<!DOCTYPE html>
+<html lang="pt-br">
+
 {{template "_head"}}
-{{template "_nav"}}
+
+<nav class="navbar navbar-light bg-light mb-4">
+  <a class="navbar-brand" href="http://{{.Ip}}{{.Port}}/files/upload.html">Voltar ao formulário</a>
+</nav>
 
 <body>
   <div class="container">
@@ -16,24 +22,26 @@
             </tr>
           </thead>
           <tbody>
-            {{range .}}
+            {{range .Files}}
             <tr>
-              <td>{{.Name}} </div></td>
-              <td>{{.Size}} KBs</td>
-              <td>{{.Modified}}</td>
-              <td><button onclick="Download('{{.Name}}')" class="btn btn-primary">Baixar</button></td>
-              <td><button onclick="onDelete('{{.Name}}')" class="btn btn-danger">Deletar</button></td>
-            </tr>
-            {{end}}
-          </tbody>
-        </table>
+              <td>{{.Name}}
       </div>
-    </section>
+      </td>
+      <td>{{.Size}} KBs</td>
+      <td>{{.Modified}}</td>
+      <td><button onclick="Download('{{.Name}}')" class="btn btn-primary">Baixar</button></td>
+      <td><button onclick="onDelete('{{.Name}}')" class="btn btn-danger">Deletar</button></td>
+      </tr>
+      {{end}}
+      </tbody>
+      </table>
+  </div>
+  </section>
   </div>
 </body>
 <script>
   function Download(name) {
-    let url = "http://10.0.0.212:80/download?file=" + name
+    let url = "http://{{.Ip}}{{.Port}}/files/download?file=" + name
     let options = {
       method: 'GET',
       cache: 'no-cache',
@@ -72,7 +80,7 @@
   function onDelete(name) {
     let resposta = confirm("Deseja mesmo deletar o arquivo de nome " + name + "?")
     if (resposta) {
-      fetch('http://10.0.0.212:80/delete?file=' + name, {
+      fetch('http://{{.Ip}}{{.Port}}/files/delete?file=' + name, {
         method: 'DELETE',
         headers: {
           "Accept": "*/*",

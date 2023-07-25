@@ -1,17 +1,13 @@
 package files
 
-import "runtime"
+type File struct {
+	Name     string
+	Size     float64
+	Modified string
+}
 
-var (
-	root string
-)
-
-func init() {
-	if runtime.GOOS == "windows" {
-		root = "C:"
-	}
-
-	if runtime.GOOS == "linux" {
-		root = "/"
-	}
+type ServerFiles struct {
+	Ip    string
+	Port  string
+	Files []File
 }

@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/wifi-transfer/controllers"
 )
 
 // func UploadWithStream(c *fiber.Ctx) error {
@@ -46,6 +47,10 @@ import (
 // }
 
 func Upload(c *fiber.Ctx) error {
+	if err := controllers.AuthenticateSession(c); err != nil {
+		return fmt.Errorf("Você não fez login")
+	}
+
 	header, err := c.FormFile("file")
 	if err != nil {
 		return err
@@ -53,7 +58,7 @@ func Upload(c *fiber.Ctx) error {
 
 	var filename string
 
-  fmt.Println(string(c.Request().Header.Header()))
+	fmt.Println(string(c.Request().Header.Header()))
 	infos := strings.Split(c.Get("Content-Disposition"), " ")
 	for _, str := range infos {
 		regex, err := regexp.Compile("filename.*")

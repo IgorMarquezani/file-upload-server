@@ -1,11 +1,14 @@
 {{define "Index"}}
 
+<!DOCTYPE html>
+<html lang="pt-br">
+
 {{template "_head"}}
 
 <html lang="pt-br">
 
 <nav class="navbar navbar-light bg-light mb-4">
-  <a class="navbar-brand" href="http://10.0.0.212:80/files">Listar arquivos</a>
+  <a class="navbar-brand" href="/files/list">Listar arquivos</a>
 </nav>
 
 <body>
@@ -33,7 +36,7 @@
         var xhr = new XMLHttpRequest();
 
         // Set up the request
-        xhr.open('POST', '/upload', true);
+        xhr.open('POST', '/files/upload', true);
 
         // Set up the onload function
         xhr.onload = function () {
