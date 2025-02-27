@@ -132,8 +132,12 @@ func executeArgs(args []string) error {
 }
 
 func main() {
+	temp := html.New("views", ".html")
+
+	temp.Reload(true)
+
 	app := fiber.New(fiber.Config{
-		Views:   html.New("views", ".html"),
+		Views:   temp,
 		AppName: "http file transfer",
 	})
 
