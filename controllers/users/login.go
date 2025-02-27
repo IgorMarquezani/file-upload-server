@@ -42,12 +42,10 @@ func getUser(name string) User {
 
 func ValidateLogin(c *fiber.Ctx) error {
 	var (
-		name    = c.FormValue("name")
+		name   = c.FormValue("name")
 		passwd = c.FormValue("passwd")
-		user    = getUser(name)
+		user   = getUser(name)
 	)
-
-  fmt.Println(name, passwd, getUser("Edson Marquezani"))
 
 	if user.Name == "" || user.Passwd != passwd {
 		c.Status(http.StatusUnauthorized)
@@ -60,6 +58,7 @@ func ValidateLogin(c *fiber.Ctx) error {
 		Name:    "session",
 		Value:   se.Id,
 		Expires: time.Now().Add(time.Hour * 24),
+		Path:    "/",
 	})
 
 	return nil

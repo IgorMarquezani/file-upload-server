@@ -44,6 +44,7 @@
     let url = "http://{{.Ip}}{{.Port}}/files/download?file=" + name
     let options = {
       method: 'GET',
+      cors: "no-cors",
       cache: 'no-cache',
       headers: {
         "Accept-Language": "*",

@@ -1,7 +1,6 @@
 package files
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,7 +9,7 @@ import (
 
 func List(c *fiber.Ctx) error {
 	if err := controllers.AuthenticateSession(c); err != nil {
-		return fmt.Errorf("Você não fez login")
+		return c.SendString("Você não fez login")
 	}
 
 	server := ServerFiles{
