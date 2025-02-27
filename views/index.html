@@ -12,11 +12,20 @@
 </nav>
 
 <body>
-  <div class="form-group">
-    <label for="exampleFormControlFile1">Selecionar arquivo</label>
-    <input type="file" class="form-control-file" id="fileInput">
+  <div class="container mt-5">
+    <div class="form-group col-sm-5 p-5 bg-white rounded-top m-auto">
+      <div>
+        <input type="file" class="form-control" id="fileInput" onchange="previewFile()">
+      </div>
+      <div class="text-center mt-4">
+        <button class="btn btn-primary" onclick="submitFile()">Enviar</button>
+      </div>
+    </div>
+    <div class="col-sm-5 m-auto p-2 bg-white">
+      <img id="preview" class="img-fluid" src="" alt="">
+    </div>
   </div>
-  <button onclick="submitFile()">Enviar</button>
+  <script src="/static/js/index-listener.js"></script>
 
   <script>
     function submitFile() {

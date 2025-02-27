@@ -61,7 +61,7 @@ func ValidateLogin(c *fiber.Ctx) error {
 		Path:    "/",
 	})
 
-	return nil
+	return c.SendString("loged in")
 }
 
 func LoginPage(c *fiber.Ctx) error {

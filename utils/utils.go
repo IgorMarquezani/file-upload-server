@@ -11,8 +11,8 @@ func RandomArray(size uint) []byte {
 	rand.Seed(int64(time.Now().Nanosecond()))
 
 	for i := 0; i < len(arr); i++ {
-		c := rand.Intn(int('{'))
-		if c >= 'A' && c <= 'z' {
+		c := rand.Intn(int('['))
+		if c >= 'A' && c <= 'Z' {
 			arr[i] = byte(c)
 		} else {
 			i--

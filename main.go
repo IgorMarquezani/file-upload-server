@@ -32,18 +32,18 @@ const (
 
 var (
 	helped bool
-	regex1 *regexp.Regexp
+	regex  *regexp.Regexp
 	addr   = "127.0.0.1"
 	port   = ":80"
 )
 
 func init() {
 	if runtime.GOOS == "linux" {
-		regex1 = regexp.MustCompile("(wlan.*)|(wlp2s.*)")
+		regex = regexp.MustCompile("(wlan.*)|(wlp2s.*)")
 	}
 
 	if runtime.GOOS == "windows" {
-		regex1 = regexp.MustCompile("Wi-Fi.*")
+		regex = regexp.MustCompile("Wi-Fi.*")
 	}
 }
 
@@ -54,7 +54,7 @@ func getWifiNetworkIP() string {
 	}
 
 	for _, network := range networks {
-		if regex1.MatchString(network.Name) {
+		if regex.MatchString(network.Name) {
 			addrs, err := network.Addrs()
 			if err != nil {
 				panic(err)
