@@ -1,7 +1,7 @@
 # File upload server
 
 this CLI creates a web server for uploading and downloading files on the ip addres and port of your preference
-but it's intended to be user on the wifi network, so you can share files on your local network
+but it's intended to be used on the wifi network, so you can share files on your local network
 
 ### Some of the commands are:
 
